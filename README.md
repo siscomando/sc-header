@@ -32,37 +32,43 @@ register, title, uga, ugs, created_at.
 - title is the service name
 - uga is responsible sector by treatment
 - ugs is responsible sector by customer agreement
-- create_at is date that ticket that was created by final customer
+- create_at is date that the ticket was created by final customer
 
 ```
 ...
 <body>
  <core-header-panel>
      <sc-header class="core-header"
-     issueInfo=='{"register": "#2015RI/000046XXX", "title":"SICAP - SISTEMA DE CALCULOS E PERICIAS - AMBIENTE", "uga": "SUPGS", "ugs": "SUNFJ", "created_at":"19/02/2015 13h27"}'>
+     issueInfo=='{"register": "#2015RI/000046XXX", "title":"SICAP - SISTEMA DE
+     CALCULOS E PERICIAS - AMBIENTE", "uga": "SUPGS", "ugs": "SUNFJ",
+     "created_at":"19/02/2015 13h27"}'>
      </sc-header>
  </core-heder-panel>
 ```
 
-### Final: Your app must have this appearance
+### Your app must have this appearance
 ```
+...
 <body fullbleed vertical layout unresolved>
 
   <core-header-panel>
       <sc-header class="core-header"
-      issueInfo ='{"register": "#2015RI/000046393", "title":"SICAP - SISTEMA DE CALCULOS E PERICIAS - AMBIENTE", "uga": "SUPGS", "ugs": "SUNFJ", "created_at":"19/02/2015 13h27"}'>
+      issueInfo ='{"register": "#2015RI/000046393", "title":"SICAP - SISTEMA DE
+      CALCULOS E PERICIAS - AMBIENTE", "uga": "SUPGS", "ugs": "SUNFJ",
+      "created_at":"19/02/2015 13h27"}'>
       </sc-header>
   </core-header-panel>
-
-
 </body>
+...
 ```
 
 Advanced Usage
 ===============
 
 ### Search
-The search feature uses the core-ajax component to search. It's expected by default the fields:
+The search feature uses the core-ajax component to search. This requires that
+your model have something similar the fields below. It's expected by default
+the fields:
 
 ```
 {
@@ -77,4 +83,3 @@ The search feature uses the core-ajax component to search. It's expected by defa
     "dated": "21/03/2015 18h21"
 }
 ```
-This requires that your model have something similar the fields above.
