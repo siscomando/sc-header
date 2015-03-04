@@ -1,0 +1,120 @@
+:host {
+  display: block;
+  font-family: 'RobotoDraft', sans-serif;
+}
+
+/*
+:host /deep/ #ink, :host /deep/ #selectionBar, :host /deep/ #onRadio {
+  color: #FED359;
+}
+*/
+/* To ensure your styling works under the Shadow DOM polyfill, see
+   www.polymer-project.org/docs/polymer/styling.html#directives */
+polyfill-next-selector { content: ':host > h2'; }
+::content h2 {
+  color: blue;
+}
+
+.container-header {
+  height: 100%;
+}
+
+core-toolbar {
+  background: #47CACC;
+  color: white;
+  min-height: 64px;
+}
+
+core-toolbar paper-icon-button {
+  vertical-align: middle;
+}
+#tabs {
+  width: 100%;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-transform: uppercase;
+}
+#tabs core-icon {
+  margin-right: 8px;
+}
+.menu-label {
+  display: none;
+}
+#search {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 100;
+  font-size: 16px;
+}
+.sc-search-input {
+  /* background-color: rgba(65, 189, 191, 1); */
+}
+.sc-search-input input[type="text"] {
+  color: #000;
+  outline: none;
+}
+/*  paper input decorator custom styling */
+paper-input-decorator /deep/ .unfocused-underline {
+  /* line color when the input is unfocused */
+  background-color: rgba(204, 204, 204, 0.3);
+}
+paper-input-decorator /deep/ .focused-underline {
+  /* line color when the input is focused */
+  background-color: rgba(42, 122, 124, 0.5);
+}
+paper-input-decorator /deep/ ::-webkit-input-placeholder {
+  /* platform specific rules for placeholder text */
+  color: rgba(255, 255, 255, 0.6);
+}
+paper-input-decorator /deep/ ::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+paper-input-decorator /deep/ :-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+.issues-info {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 18px;
+}
+.issues-info label {
+  display: inline;
+  color: #2A7A7C;
+  font-weight: 400;
+  margin-left: 6px;
+}
+.issues-info label.first-child {
+  margin-left: 0px;
+}
+.issues-info span {
+  display: block;
+}
+.issues-info .issues-header {
+    font-size: 13px;
+}
+.issues-info .issues-details {
+  text-transform: uppercase;
+  display: inline;
+  color: rgba(255, 255, 255, 0.8);
+}
+@media (min-width: 481px) {
+  #tabs {
+    /* width: 200px; */
+  }
+  .issues-info .issues-header {
+    font-size: 19px;
+  }
+  .issues-info {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .container {
+    width: 400px;
+  }
+  .menu-label {
+    display: block;
+  }
+}

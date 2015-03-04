@@ -1,0 +1,126 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../font-roboto/roboto.html">
+<link rel="import" href="../core-header-panel/core-header-panel.html">
+<link rel="import" href="../core-toolbar/core-toolbar.html">
+<link rel="import" href="../paper-elements/paper-elements.html">
+<link rel="import" href="../core-icon/core-icon.html">
+<link rel="import" href="../core-icons/communication-icons.html">
+
+<!--
+Element providing the header to all sisComando app.
+
+##### Example
+
+    <sc-header></sc-header>
+
+@element sc-header
+@blurb Element providing the header to all sisComando app.
+@status alpha
+@homepage http://siscomando.github.io/horacioibrahim/sc-header
+-->
+<polymer-element name="sc-header" attributes="notitle author issueInfo">
+
+  <template>
+    <link rel="stylesheet" href="sc-header.css">
+    <!-- init element sc-header -->
+    <div class="container-header" vertical layout>
+      <core-toolbar class="sc-search-input {{ displaySearch ? 'on-search' : '' }}">
+        <paper-icon-button id="searchbutton" icon="search" on-tap={{onDisplaySearch}}></paper-icon-button>
+        <paper-input-decorator id="parentsearch" label="Pesquise qualquer coisa..." flex>
+          <input id="search" is="core-input" name="s" on-blur={{onDisplaySearch}}
+          on-keyup="{{setFilter}}">
+        </paper-input-decorator>
+      </core-toolbar>
+
+      <core-toolbar>
+        <div class="issues-info">
+          <span class="issues-header">{{issueInfo.title}}</span>
+          <label class="first-child">Registro:</label>
+            <span class="issues-details">{{issueInfo.register}}</span>
+          <label>UG Atendimento:</label>
+            <span class="issues-details">{{issueInfo.uga}}</span>
+          <label>UG Serviço:</label>
+            <span class="issues-details">{{issueInfo.ugs}}</span>
+          <label>Acionado:</label>
+            <span class="issues-details">{{issueInfo.created_at}}</span>
+        </div>
+      </core-toolbar>
+
+      <core-toolbar>
+        <paper-tabs id="tabs" selected="resume" self-end >
+          <paper-tab name="resume">
+            <core-icon icon="dashboard"></core-icon><span class="menu-label">Resumo</span>
+          </paper-tab>
+          <paper-tab name="comments">
+            <core-icon icon="communication:comment"></core-icon><span class="menu-label">Comentarios</span>
+          </paper-tab>
+          <paper-tab name="people">
+            <core-icon icon="group-work"></core-icon><span class="menu-label">Pessoas</span>
+          </paper-tab>
+          <paper-tab name="links">
+            <core-icon icon="link"></core-icon><span class="menu-label">Links</span>
+          </paper-tab>
+        </paper-tabs>
+      </core-toobar>
+    </div>
+  </template>
+
+  <script>
+
+    Polymer({
+      /**
+       * The `author` attribute sets an initial author
+       *
+       * @attribute author
+       * @type string
+       * @default 'Horacio Ibrahim'
+       */
+      author: 'Horacio Ibrahim',
+
+      publish: {
+          displaySearch: {value: false, reflect: true},
+      },
+      /* the best place to the constructor for array or object */
+      created: function() {
+        // initialize but it not is turned public to use by users of the element
+        // to turn public to use attributes or publish.
+        this.issueInfo = {};
+      },
+      /**
+      Set focus to input search or makes catch a JSON of the URL
+
+      @method: onDisplaySearch
+      **/
+      onDisplaySearch: function(e, detail, sender) {
+        this.displaySearch = !this.displaySearch;
+        e.stopPropagation();
+      },
+      displaySearchChanged: function(){ // suffix functionally
+        this.$.search.focus();
+      },
+      ready: function() {
+        // Ready is a lifecycle callback.
+        // You can do setup work in here.
+        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+        // simple test alert(this.issueInfo.register);
+      },
+
+      /**
+       * The `setFilter` method will return a json with comments, history, issues
+       * data..
+       *
+       * @method setFilter
+       * @param {String} to search in REST API.
+       * @return {String} Returns a JSON.
+       */
+      setFilter: function(s) {
+        var response = s || 'Hello World!';
+        return 'sc-header says, ' + response;
+      },
+
+
+    });
+
+  </script>
+
+</polymer-element>

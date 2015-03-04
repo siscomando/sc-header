@@ -1,7 +1,7 @@
 sc-header
 ============
 
-This is sc-header element to all header of the SisComando app.
+This is sc-header element to all the header of the SisComando app.
 
 Usage
 ======
@@ -9,7 +9,7 @@ Usage
 ### Step 1: Use 'core-header' class
 Use the class 'core-header' to the core-header-panel shadow DOM to make the select
 in content tag correctly. This is way that we have to apply effects. It's "polymized"!
-Internally this occurs if you to use core-header-panel:
+Internally this occurs if you to use core-header-panel because of this:
 ```
 <content select="core-toolbar, .core-header"></content>
 ```
@@ -18,6 +18,7 @@ Internally this occurs if you to use core-header-panel:
 ...
 <body>
  <core-header-panel>
+    <!-- We using the class core-header to apply effects from paper-elements -->
      <sc-header class="core-header">
      </sc-header>
  </core-heder-panel>

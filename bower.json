@@ -1,0 +1,27 @@
+{
+  "name": "sc-header",
+  "version": "0.0.1",
+  "authors": [
+    "Horacio Ibrahim <horacioibrahim@gmail.com>"
+  ],
+  "description": "Element providing the header to all sisComando app.",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "sc-header"
+  ],
+  "main": "sc-header.html",
+  "license": "MIT",
+  "homepage": "https://github.com/horacioibrahim/sc-header/",
+  "ignore": [
+    "/.*",
+    "/tests/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^0.5.4"
+  },
+  "devDependencies": {
+    "web-component-tester": "*"
+  }
+}
