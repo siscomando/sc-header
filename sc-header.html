@@ -1,37 +1,30 @@
-<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../font-roboto/roboto.html">
-<link rel="import" href="../core-header-panel/core-header-panel.html">
 <link rel="import" href="../core-toolbar/core-toolbar.html">
 <link rel="import" href="../paper-elements/paper-elements.html">
 <link rel="import" href="../core-icon/core-icon.html">
 <link rel="import" href="../core-icons/communication-icons.html">
 
 <!--
-Element providing the header to all sisComando app.
+Element providing the inner header to a register selected by leftbar in the 
+sisComando app.
 
 ##### Example
 
-    <sc-header></sc-header>
+    <sc-header
+    issueInfo ='{"register": "#2015RI/000046393", "title":"SICAP - SISTEMA DE CALCULOS E PERICIAS - AMBIENTE", "uga": "SUPGS", "ugs": "SUNFJ", "created_at":"19/02/2015 13h27"}'>
+    </sc-header>
 
 @element sc-header
 @blurb Element providing the header to all sisComando app.
 @status alpha
 @homepage http://siscomando.github.io/horacioibrahim/sc-header
 -->
-<polymer-element name="sc-header" attributes="notitle author issueInfo">
+<polymer-element class="core-header" name="sc-header" attributes="notitle author issueInfo">
 
   <template>
     <link rel="stylesheet" href="sc-header.css">
     <!-- init element sc-header -->
     <div class="container-header" vertical layout>
-      <core-toolbar class="sc-search-input {{ displaySearch ? 'on-search' : '' }}">
-        <paper-icon-button id="searchbutton" icon="search" on-tap={{onDisplaySearch}}></paper-icon-button>
-        <paper-input-decorator id="parentsearch" label="Pesquise qualquer coisa..." flex>
-          <input id="search" is="core-input" name="s" on-blur={{onDisplaySearch}}
-          on-keyup="{{setFilter}}">
-        </paper-input-decorator>
-      </core-toolbar>
-
       <core-toolbar>
         <div class="issues-info">
           <span class="issues-header">{{issueInfo.title}}</span>
@@ -42,7 +35,7 @@ Element providing the header to all sisComando app.
           <label>UG Serviço:</label>
             <span class="issues-details">{{issueInfo.ugs}}</span>
           <label>Acionado:</label>
-            <span class="issues-details">{{issueInfo.created_at}}</span>
+            <span class="issues-details">{{issueInfo.date}}</span>
         </div>
       </core-toolbar>
 
@@ -76,49 +69,64 @@ Element providing the header to all sisComando app.
        * @default 'Horacio Ibrahim'
        */
       author: 'Horacio Ibrahim',
-
+      /**
+       * The `issueInfo` attribute sets the header info. It to require preset
+       * fields as: register, title, uga, ugs, created_at.
+       *
+       * Details:
+       *
+       *
+       *    `register`: ticket number or ID
+       *
+       *    `title`: service name (e.: systems, services as Expresso)
+       *
+       *    `uga`: responsible sector by treatment
+       *
+       *    `ugs`: responsible sector by customer agreement
+       *
+       *    `create_at`: date that the ticket was created by final customer
+       *
+       *
+       * @attribute issueInfo
+       * @type object
+       * @default  {}
+       */
+      issueInfo: {},
       publish: {
-          displaySearch: {value: false, reflect: true},
+        // publics properties
       },
       /* the best place to the constructor for array or object */
       created: function() {
         // initialize but it not is turned public to use by users of the element
         // to turn public to use attributes or publish.
         this.issueInfo = {};
-      },
-      /**
-      Set focus to input search or makes catch a JSON of the URL
-
-      @method: onDisplaySearch
-      **/
-      onDisplaySearch: function(e, detail, sender) {
-        this.displaySearch = !this.displaySearch;
-        e.stopPropagation();
-      },
-      displaySearchChanged: function(){ // suffix functionally
-        this.$.search.focus();
-      },
+      }
+      ,
       ready: function() {
         // Ready is a lifecycle callback.
         // You can do setup work in here.
         // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
         // simple test alert(this.issueInfo.register);
-      },
+        if (!('register' in this.issueInfo))
+            this.issueInfo.register = "------------";
+        if (!('title' in this.issueInfo))
+            this.issueInfo.title = "------------";
+        if (!('uga' in this.issueInfo))
+            this.issueInfo.uga = "------------";
+        if (!('ugs' in this.issueInfo))
+            this.issueInfo.ugs = "------------";
+        if (!('created_at' in this.issueInfo))
+            this.issueInfo.created_at = "------------";
 
-      /**
-       * The `setFilter` method will return a json with comments, history, issues
-       * data..
-       *
-       * @method setFilter
-       * @param {String} to search in REST API.
-       * @return {String} Returns a JSON.
-       */
-      setFilter: function(s) {
-        var response = s || 'Hello World!';
-        return 'sc-header says, ' + response;
-      },
+        var scnavbar = document.querySelector('sc-navbar');
 
-
+        scnavbar.addEventListener('sc-select', function(e){
+            console.log("Eu fui selecionado: " + e.detail.issue);
+            mythis = document.querySelector('sc-header');
+            mythis.issueInfo = e.detail.issue;
+            //this.issueInfo["register"] = e.detail.issue.register;
+        });
+      }
     });
 
   </script>

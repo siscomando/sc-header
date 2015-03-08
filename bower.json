@@ -13,7 +13,7 @@
   ],
   "main": "sc-header.html",
   "license": "MIT",
-  "homepage": "https://github.com/horacioibrahim/sc-header/",
+  "homepage": "https://github.com/siscomando/sc-header/",
   "ignore": [
     "/.*",
     "/tests/"
