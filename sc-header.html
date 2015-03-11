@@ -121,7 +121,6 @@ sisComando app.
         var scnavbar = document.querySelector('sc-navbar');
 
         scnavbar.addEventListener('sc-select', function(e){
-            console.log("Eu fui selecionado: " + e.detail.issue);
             mythis = document.querySelector('sc-header');
             mythis.issueInfo = e.detail.issue;
             //this.issueInfo["register"] = e.detail.issue.register;
