@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: none; /* bug: when initiated as none its not select tab */;
   font-family: 'RobotoDraft', sans-serif;
 }
 

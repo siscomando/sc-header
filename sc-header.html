@@ -2,6 +2,7 @@
 <link rel="import" href="../core-toolbar/core-toolbar.html">
 <link rel="import" href="../paper-elements/paper-elements.html">
 <link rel="import" href="../core-icon/core-icon.html">
+<link rel="import" href="../core-animation/core-animation.html">
 <link rel="import" href="../core-icons/communication-icons.html">
 
 <!--
@@ -40,7 +41,7 @@ sisComando app.
       </core-toolbar>
 
       <core-toolbar>
-        <paper-tabs id="tabs" selected="resume" self-end >
+        <paper-tabs id="tabs" selected="comments" self-end>
           <paper-tab name="resume">
             <core-icon icon="dashboard"></core-icon><span class="menu-label">Resumo</span>
           </paper-tab>
@@ -55,7 +56,8 @@ sisComando app.
           </paper-tab>
         </paper-tabs>
       </core-toobar>
-    </div>
+    </div> 
+      
   </template>
 
   <script>
@@ -100,13 +102,26 @@ sisComando app.
         // initialize but it not is turned public to use by users of the element
         // to turn public to use attributes or publish.
         this.issueInfo = {};
-      }
-      ,
+      },
+      issueInfoChanged: function () {
+        if (!(this.style.display == "block")) {
+          var animation = new CoreAnimation();
+          animation.duration = 220;
+          animation.keyframes = [
+            {opacity: 0.3},
+            {opacity: 1}
+          ];
+          animation.target = this;
+          animation.play();        
+          this.style.display = "block";
+          this.selected = "comments";
+        }
+      },
       ready: function() {
         // Ready is a lifecycle callback.
         // You can do setup work in here.
         // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-        // simple test alert(this.issueInfo.register);
+        // simple test alert(this.issueInfo.register);        
         if (!('register' in this.issueInfo))
             this.issueInfo.register = "------------";
         if (!('title' in this.issueInfo))
@@ -122,8 +137,7 @@ sisComando app.
 
         scnavbar.addEventListener('sc-select', function(e){
             mythis = document.querySelector('sc-header');
-            mythis.issueInfo = e.detail.issue;
-            //this.issueInfo["register"] = e.detail.issue.register;
+            mythis.issueInfo = e.detail.issue;            
         });
       }
     });
