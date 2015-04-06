@@ -2,6 +2,7 @@
 <link rel="import" href="../core-toolbar/core-toolbar.html">
 <link rel="import" href="../paper-elements/paper-elements.html">
 <link rel="import" href="../core-icon/core-icon.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
 <link rel="import" href="../core-animation/core-animation.html">
 <link rel="import" href="../core-icons/communication-icons.html">
 
@@ -28,36 +29,50 @@ sisComando app.
     <div class="container-header" vertical layout>
       <core-toolbar>
         <div class="issues-info">
-          <span class="issues-header">{{issueInfo.title}}</span>
+          <span class="issues-header">{{issueInfo.issue.title}}</span>
           <label class="first-child">Registro:</label>
-            <span class="issues-details">{{issueInfo.register}}</span>
+            <span class="issues-details">{{issueInfo.issue.register}}</span>
           <label>UG Atendimento:</label>
-            <span class="issues-details">{{issueInfo.uga}}</span>
+            <span class="issues-details">{{issueInfo.issue.ugat}}</span>
           <label>UG Serviço:</label>
-            <span class="issues-details">{{issueInfo.ugs}}</span>
+            <span class="issues-details">{{issueInfo.issue.ugser}}</span>
           <label>Acionado:</label>
-            <span class="issues-details">{{issueInfo.date}}</span>
+            <span class="issues-details">{{issueInfo.issue.created_at}}</span>
         </div>
       </core-toolbar>
-
+      <!--
       <core-toolbar>
         <paper-tabs id="tabs" selected="comments" self-end>
+          
           <paper-tab name="resume">
             <core-icon icon="dashboard"></core-icon><span class="menu-label">Resumo</span>
           </paper-tab>
+          
+
           <paper-tab name="comments">
             <core-icon icon="communication:comment"></core-icon><span class="menu-label">Comentarios</span>
           </paper-tab>
+          
           <paper-tab name="people">
             <core-icon icon="group-work"></core-icon><span class="menu-label">Pessoas</span>
           </paper-tab>
+          
           <paper-tab name="links">
             <core-icon icon="link"></core-icon><span class="menu-label">Links</span>
           </paper-tab>
+          
         </paper-tabs>
       </core-toobar>
+      -->
     </div> 
-      
+    <core-ajax id="coreAjaxHeader"
+      auto
+      url="{{url}}"
+      contentType="application/json"
+      response="{{response}}"
+      handleAs="json"
+    >
+    </core-ajax>
   </template>
 
   <script>
@@ -103,6 +118,16 @@ sisComando app.
         // to turn public to use attributes or publish.
         this.issueInfo = {};
       },
+      ready: function() {       
+
+        // var scnavbar = document.querySelector('sc-navbar');
+        document.addEventListener('sc-select', function(e){
+            var mythis = document.querySelector('sc-header');
+            var ajax = mythis.$.coreAjaxHeader;
+            var registerNumber = e.detail.issue;
+            ajax.url = "/api/v1/issues/" + registerNumber;
+        });
+      },      
       issueInfoChanged: function () {
         if (!(this.style.display == "block")) {
           var animation = new CoreAnimation();
@@ -116,29 +141,39 @@ sisComando app.
           this.style.display = "block";
           this.selected = "comments";
         }
+        if (this.issueInfo) {
+          this.issueInfo.issue.created_at = this.converter(this.issueInfo.issue.created_at.$date);     
+        }
       },
-      ready: function() {
-        // Ready is a lifecycle callback.
-        // You can do setup work in here.
-        // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
-        // simple test alert(this.issueInfo.register);        
-        if (!('register' in this.issueInfo))
-            this.issueInfo.register = "------------";
-        if (!('title' in this.issueInfo))
-            this.issueInfo.title = "------------";
-        if (!('uga' in this.issueInfo))
-            this.issueInfo.uga = "------------";
-        if (!('ugs' in this.issueInfo))
-            this.issueInfo.ugs = "------------";
-        if (!('created_at' in this.issueInfo))
-            this.issueInfo.created_at = "------------";
+      converter: function(timestamp) {
+          // create a new javascript Date object based on the timestamp
+          // multiplied by 1000 so that the argument is in milliseconds, not seconds
+          var date = new Date(timestamp);
+          // hours part from the timestamp
+          var hours = date.getHours();
+          // minutes part from the timestamp
+          var minutes = "0" + date.getMinutes();
+          // seconds part from the timestamp
+          var seconds = "0" + date.getSeconds();
+          // day
+          var day = date.getDate();
+          // month
+          var month = date.getMonth() + 1;
+          // year
+          var year = date.getFullYear();  
+          // hour
+          var hour = date.getHours();
+          // minutes
+          var min = date.getMinutes();
 
-        var scnavbar = document.querySelector('sc-navbar');
+          // will display time in 10:30:23 format
+          var formattedTime = hour + "h" + min + " " +  day + "/" + month + "/" + year; 
+          // var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 
-        scnavbar.addEventListener('sc-select', function(e){
-            mythis = document.querySelector('sc-header');
-            mythis.issueInfo = e.detail.issue;            
-        });
+          return formattedTime;
+      },
+      responseChanged: function() {
+            this.issueInfo = this.response; 
       }
     });
 
