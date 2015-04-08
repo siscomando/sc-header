@@ -1,6 +1,8 @@
 :host {
   display: none; /* bug: when initiated as none its not select tab */;
   font-family: 'RobotoDraft', sans-serif;
+  background: #47CACC;
+  padding-bottom: 12px; 
 }
 
 /*
