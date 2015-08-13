@@ -7,7 +7,7 @@
 <link rel="import" href="../core-icons/communication-icons.html">
 
 <!--
-Element providing the inner header to a register selected by leftbar in the 
+Element providing the inner header to a register selected by leftbar in the
 sisComando app.
 
 ##### Example
@@ -29,54 +29,52 @@ sisComando app.
     <div class="container-header" vertical layout>
       <core-toolbar>
         <div class="issues-info">
-          <span class="issues-header">{{issueInfo.issue.title}}</span>
+          <span class="issues-header">{{issue.title}}</span>
           <label class="first-child">Registro:</label>
-            <span class="issues-details">{{issueInfo.issue.register}}</span>
+            <span class="issues-details">{{issue.register}}</span>
           <label>UG Atendimento:</label>
-            <span class="issues-details">{{issueInfo.issue.ugat}}</span>
+            <span class="issues-details">{{issue.ugat}}</span>
           <label>UG Serviço:</label>
-            <span class="issues-details">{{issueInfo.issue.ugser}}</span>
+            <span class="issues-details">{{issue.ugser}}</span>
           <label>Acionado:</label>
-            <span class="issues-details">{{issueInfo.issue.created_at}}</span>
+            <span class="issues-details">{{issue.created_at}}</span>
         </div>
       </core-toolbar>
       <!--
       <core-toolbar>
         <paper-tabs id="tabs" selected="comments" self-end>
-          
+
           <paper-tab name="resume">
             <core-icon icon="dashboard"></core-icon><span class="menu-label">Resumo</span>
           </paper-tab>
-          
+
 
           <paper-tab name="comments">
             <core-icon icon="communication:comment"></core-icon><span class="menu-label">Comentarios</span>
           </paper-tab>
-          
+
           <paper-tab name="people">
             <core-icon icon="group-work"></core-icon><span class="menu-label">Pessoas</span>
           </paper-tab>
-          
+
           <paper-tab name="links">
             <core-icon icon="link"></core-icon><span class="menu-label">Links</span>
           </paper-tab>
-          
+
         </paper-tabs>
       </core-toobar>
       -->
-    </div> 
+    </div>
     <core-ajax id="coreAjaxHeader"
       auto
       url="{{url}}"
-      contentType="application/json"
       response="{{response}}"
       handleAs="json"
-    >
-    </core-ajax>
+      headers="{{ headerRequest() }}"
+      contentType="application/json"></core-ajax>
   </template>
 
   <script>
-
     Polymer({
       /**
        * The `author` attribute sets an initial author
@@ -87,63 +85,30 @@ sisComando app.
        */
       author: 'Horacio Ibrahim',
       /**
-       * The `issueInfo` attribute sets the header info. It to require preset
-       * fields as: register, title, uga, ugs, created_at.
+       * The `issue` attribute sets the header info. It to require preset
+       * fields as: register, title, ugat, ugser, created_at.
        *
-       * Details:
-       *
-       *
-       *    `register`: ticket number or ID
-       *
-       *    `title`: service name (e.: systems, services as Expresso)
-       *
-       *    `uga`: responsible sector by treatment
-       *
-       *    `ugs`: responsible sector by customer agreement
-       *
-       *    `create_at`: date that the ticket was created by final customer
-       *
-       *
-       * @attribute issueInfo
+       * @attribute issue
        * @type object
        * @default  {}
        */
-      issueInfo: {},
-      publish: {
-        // publics properties
+      issue: {},
+      create: function () {
+        var hasSiscomando = siscomando || false;
+        if (hasSiscomando === false) {
+          console.error("Siscomando library not found <sc-header>");
+        }
       },
-      /* the best place to the constructor for array or object */
-      created: function() {
-        // initialize but it not is turned public to use by users of the element
-        // to turn public to use attributes or publish.
-        this.issueInfo = {};
-      },
-      ready: function() {       
-
+      ready: function() {
+        var self = this;
         // var scnavbar = document.querySelector('sc-navbar');
         document.addEventListener('sc-select', function(e){
-            var mythis = document.querySelector('sc-header');
-            var ajax = mythis.$.coreAjaxHeader;
+            // var self = document.querySelector('sc-header');
+            var ajax = self.$.coreAjaxHeader;
             var registerNumber = e.detail.issue;
-            ajax.url = "/api/v1/issues/" + registerNumber;
+            // ajax.url = "/api/v1/issues/" + registerNumber;
+            ajax.url = siscomando.helpers.issues.item.getUrl(registerNumber);
         });
-      },      
-      issueInfoChanged: function () {
-        if (!(this.style.display == "block")) {
-          var animation = new CoreAnimation();
-          animation.duration = 220;
-          animation.keyframes = [
-            {opacity: 0.3},
-            {opacity: 1}
-          ];
-          animation.target = this;
-          animation.play();        
-          this.style.display = "block";
-          this.selected = "comments";
-        }
-        if (this.issueInfo) {
-          this.issueInfo.issue.created_at = this.converter(this.issueInfo.issue.created_at.$date);     
-        }
       },
       converter: function(timestamp) {
           // create a new javascript Date object based on the timestamp
@@ -160,21 +125,46 @@ sisComando app.
           // month
           var month = date.getMonth() + 1;
           // year
-          var year = date.getFullYear();  
+          var year = date.getFullYear();
           // hour
           var hour = date.getHours();
           // minutes
           var min = date.getMinutes();
 
           // will display time in 10:30:23 format
-          var formattedTime = hour + "h" + min + " " +  day + "/" + month + "/" + year; 
+          var formattedTime = hour + "h" + min + " " +  day + "/" + month + "/" + year;
           // var formattedTime = hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
 
           return formattedTime;
       },
       responseChanged: function() {
-            this.issueInfo = this.response; 
-      }
+          this.issue = this.response;
+
+          if (!(this.style.display == "block")) {
+            var animation = new CoreAnimation();
+            animation.duration = 220;
+            animation.keyframes = [
+              {opacity: 0.3},
+              {opacity: 1}
+            ];
+            animation.target = this;
+            animation.play();
+            this.style.display = "block";
+            this.selected = "comments";
+          }
+          /*
+          if (this.issue) {
+            this.issue.created_at = this.converter(this.issue.created_at);
+          }
+          */
+      },
+      headerRequest: function(payload) {
+        // TODO: if not exists Account in localStorage
+        var accountData = JSON.parse(window.localStorage.getItem("Account"));
+        var token = accountData.message.token;
+        var b64Token = btoa(token + ":");
+        return JSON.stringify({"Authorization": "Basic " + b64Token});
+      },
     });
 
   </script>
